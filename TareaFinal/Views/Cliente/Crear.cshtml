@@ -1,0 +1,43 @@
+﻿<style>
+    .formulario {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="formulario card">
+        <div class="card-body">
+            <span class="h3">Agregar cliente</span>
+            <form class="mt-3" method="POST" action="/Cliente/Crear">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-id-badge"></i></span>
+                    <input type="text" class="form-control" placeholder="Ingrese nombre" aria-label="Nombre" aria-describedby="basic-addon1" name="Nombre" id="Nombre" autofocus required>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="fas fa-globe-americas"></i></span>
+                    <select class="form-control" asp-items="@(new SelectList(Model, "Id", "Nombre"))" name="NombrePais" required></select>
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="fas fa-birthday-cake"></i></span>
+                    <input type="date" class="form-control" aria-label="Fecha" name="FechaNacimiento" id="FechaNacimiento" required>
+                </div>
+                <div>
+                    <input class="btn btn-secondary " type="submit" value="Agregar" />
+                </div>
+            </form>
+            <div class="text-info mt-2">
+                <p>@ViewBag.Datos</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class=" mt-5">
+    <a class="btn btn-lg font-weight-bold btn-light" href="/Cliente"><i class="fas fa-arrow-left m-2"></i>Volver</a>
+</div>

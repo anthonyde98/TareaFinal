@@ -1,0 +1,37 @@
+﻿<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <span class="h3">Listado de clientes</span>
+            <a class="btn btn-lg btn-dark float-right font-weight-bold" href="Cliente/Crear"><i class="fas fa-plus mr-2"></i> Nuevo cliente</a>
+            <table class="table table-striped mt-5">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Codigo</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Pais</th>
+                        <th scope="col">Fecha Nacimiento</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row">@item.Id</th>
+                            <td>@item.Nombre</td>
+                            <td>@item.NombrePais</td>
+                            <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @Html.ActionLink("", "Detalle", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-info fas fa-info-circle", style = "color: blue", title = "Detalle" })
+                                @Html.ActionLink("", "Editar", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-warning fas fa-pen-alt", style = "color: orange", title = "Editar" })
+                                @Html.ActionLink("", "Eliminar", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-danger fas fa-trash-alt", style = "color: darkred", title = "Eliminar" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

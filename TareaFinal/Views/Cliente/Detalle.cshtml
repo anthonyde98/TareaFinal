@@ -1,0 +1,42 @@
+﻿<style>
+    table colgroup col:nth-child(1) {
+        background-color: #343a40;
+        border-color: black;
+        width: 175px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <span class="h3">Detalles del cliente</span>
+            <table class="table mt-3 text-center">
+                <colgroup>
+                    <col />
+                    <col />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td class="font-weight-bold text-light">Codigo</td>
+                        <td>@Model.Id</td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold text-light">Nombre</td>
+                        <td>@Model.Nombre</td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold text-light">Pais</td>
+                        <td>@Model.NombrePais</td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold text-light">Fecha de Nacimiento</td>
+                        <td>@Model.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class=" mt-5">
+    <a class="btn btn-lg font-weight-bold btn-light" href="/Cliente"><i class="fas fa-arrow-left m-2"></i>Volver</a>
+</div>

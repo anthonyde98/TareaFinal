@@ -12,7 +12,7 @@ namespace TareaFinal.Controllers
     public class ClienteController : Controller
     {
         private readonly ILogger<ClienteController> _logger;
-        Models.TareaFinalContext _db = new TareaFinalContext();
+        Models.TareaFinalContext db = new TareaFinalContext();
 
         public ClienteController(ILogger<ClienteController> logger)
         {
@@ -24,6 +24,23 @@ namespace TareaFinal.Controllers
             return View(BuscarCliente());
         }
 
+        public IQueryable<ClienteViewModel> BuscarCliente()
+        {
+            var cliente = from c in db.Clientes
+                          from p in db.Pais
+                          where c.IdPais == p.IdPais
+                          select new ClienteViewModel()
+                          {
+                              IdCliente = c.IdCliente,
+                              Nombre = c.Nombre,
+                              FechaNacimiento = c.FechaNacimiento,
+                              NombrePais = p.Nombre
+                          };
+
+            return cliente;
+        }
+
+
         [HttpGet]
         public IActionResult Crear()
         {     
@@ -34,116 +51,101 @@ namespace TareaFinal.Controllers
         public IActionResult Crear(Cliente cliente)
         {
             InsertarCliente(cliente);
-            ViewBag.Datos = "Cliente agregado";
+            ViewBag.Datos = "cliente agregado";
 
             return View(BuscarPaises());
         }
 
-        public IActionResult Detalle(int id)
-        {
-            return View(BuscarClienteById(id));
-        }
-
-        [HttpGet]
-        public IActionResult Editar(int id)
-        {
-            return View(ConfigEditarCliente(id));
-        }
-
-        [HttpPost]
-        public IActionResult Editar(Cliente Cliente)
-        {
-            EditarCliente(Cliente);
-            return RedirectToAction("Index");
-        }
-
-        public IActionResult Eliminar(int id)
-        {
-            EliminarCliente(id);
-            return View();
-        }
-
-        //------------------------ Metodos CUD (Create, Update, Delete) ------------------------------
-
-        public void InsertarCliente(Cliente costumer)
-        {
-
-            _db.Clientes.Add(costumer);
-            _db.SaveChanges();
-        }
-
-        public void EditarCliente(Cliente costumer)
-        {
-            Cliente costumer2 = _db.Clientes.Single(cliente => cliente.Id == costumer.Id);
-            costumer2.Nombre = costumer.Nombre;
-            costumer2.NombrePais = costumer.NombrePais;
-            costumer2.FechaNacimiento = costumer.FechaNacimiento;
-            _db.SaveChanges();
-        }
-
-        public void EliminarCliente(int id)
-        {
-            Cliente costumer = _db.Clientes.Single(cliente => cliente.Id == id);
-            _db.Clientes.Remove(costumer);
-            _db.SaveChanges();
-        }
-
-        //-------------------------------------------------------------------------------------------
-
-        //------------------------------------ Metodos R (Read) -------------------------------------
-
-        public IQueryable<ClienteViewModel> BuscarCliente()
-        {
-            var Cliente = from c in _db.Clientes 
-                          from p in _db.Pais 
-                          where c.NombrePais == p.Id 
-                          select new ClienteViewModel() 
-                          { 
-                              Id = c.Id, 
-                              Nombre = c.Nombre, 
-                              FechaNacimiento = c.FechaNacimiento, 
-                              NombrePais = p.Nombre 
-                          };
-
-            return Cliente;
-        }
-
         public List<Pais> BuscarPaises()
         {
-            var paises = _db.Pais.ToList();
+            var paises = this.db.Pais.ToList();
 
             return paises;
         }
 
-        public ClienteViewModel BuscarClienteById(int id)
+
+        public void InsertarCliente(Cliente cliente)
         {
-            var Cliente = from c in _db.Clientes
-                          from p in _db.Pais
-                          where c.NombrePais == p.Id && c.Id == id
+            this.db.Clientes.Add(cliente);
+            this.db.SaveChanges();
+        }
+
+        public IActionResult Detalle(int idCliente)
+        {
+            return View(BuscarClientePorId(idCliente));
+        }
+
+        public ClienteViewModel BuscarClientePorId(int idCliente)
+        {
+
+
+
+            var cliente = from c in this.db.Clientes
+                          from p in this.db.Pais
+                          where c.IdPais == p.IdPais && c.IdCliente == idCliente
                           select new ClienteViewModel()
                           {
-                              Id = c.Id,
+                              IdCliente = c.IdCliente,
                               Nombre = c.Nombre,
                               FechaNacimiento = c.FechaNacimiento,
                               NombrePais = p.Nombre
                           };
 
-            return Cliente.Single();
+            return cliente.Single();
         }
+
+        [HttpGet]
+        public IActionResult Editar(int idCliente)
+        {
+            return View(ConfigEditarCliente(idCliente));
+        }
+
+        [HttpPost]
+        public IActionResult Editar(Cliente cliente)
+        {
+            EditarCliente(cliente);
+            return RedirectToAction("Index");
+        }
+
+        public void EditarCliente(Cliente clienteActual)
+        {
+            Cliente clientePorEditar = db.Clientes.Single(cliente => cliente.IdCliente == clienteActual.IdCliente);
+            clientePorEditar.Nombre = clienteActual.Nombre;
+            clientePorEditar.IdPais = clienteActual.IdPais;
+            clientePorEditar.FechaNacimiento = clienteActual.FechaNacimiento;
+            this.db.SaveChanges();
+        }
+
+        public IActionResult Eliminar(int idCliente)
+        {
+            
+            EliminarCliente(idCliente);
+            return View();
+        }
+
+       
+        public void EliminarCliente(int id)
+        {
+            Cliente clientePorEliminar = db.Clientes.Single(cliente => cliente.IdCliente == id);
+            this.db.Clientes.Remove(clientePorEliminar);
+            this.db.SaveChanges();
+        }
+
+       
 
         //---------------------------------------------------------------------------------------------
 
         //------------------------------------- Metodos Extras ----------------------------------------
 
-        public EditarClienteViewModel ConfigEditarCliente(int id)
+        public EditarClienteViewModel ConfigEditarCliente(int idCliente)
         {
-            EditarClienteViewModel CPs = new EditarClienteViewModel();
+            EditarClienteViewModel editarClienteViewModel = new EditarClienteViewModel();
 
-            CPs.Cliente = _db.Clientes.Single(costumer => costumer.Id == id);
+            editarClienteViewModel.Cliente = this.db.Clientes.Single(cliente => cliente.IdCliente == idCliente);
 
-            CPs.Paises = BuscarPaises();
+            editarClienteViewModel.Paises = BuscarPaises();
 
-            return CPs;
+            return editarClienteViewModel;
         }
     }
 }

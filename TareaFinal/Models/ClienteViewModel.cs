@@ -7,7 +7,7 @@ namespace TareaFinal.Models
 {
     public class ClienteViewModel
     {
-        public int Id { get; set; }
+        public int IdCliente { get; set; }
         public string Nombre { get; set; }
         public DateTime? FechaNacimiento { get; set; }
         public string NombrePais { get; set; }

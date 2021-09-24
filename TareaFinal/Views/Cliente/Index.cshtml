@@ -18,14 +18,14 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <th scope="row">@item.Id</th>
+                            <th scope="row">@item.IdCliente</th>
                             <td>@item.Nombre</td>
                             <td>@item.NombrePais</td>
                             <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
                             <td>
-                                @Html.ActionLink("", "Detalle", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-info fas fa-info-circle", style = "color: blue", title = "Detalle" })
-                                @Html.ActionLink("", "Editar", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-warning fas fa-pen-alt", style = "color: orange", title = "Editar" })
-                                @Html.ActionLink("", "Eliminar", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-danger fas fa-trash-alt", style = "color: darkred", title = "Eliminar" })
+                                @Html.ActionLink("", "Detalle", new { idCliente = item.IdCliente }, new { @class = "text-decoration-none btn btn-link btn-outline-info fas fa-info-circle", style = "color: blue", title = "Detalle" })
+                                @Html.ActionLink("", "Editar", new { idCliente = item.IdCliente }, new { @class = "text-decoration-none btn btn-link btn-outline-warning fas fa-pen-alt", style = "color: orange", title = "Editar" })
+                                @Html.ActionLink("", "Eliminar", new { idCliente = item.IdCliente }, new { @class = "text-decoration-none btn btn-link btn-outline-danger fas fa-trash-alt", style = "color: darkred", title = "Eliminar" })
                             </td>
                         </tr>
                     }

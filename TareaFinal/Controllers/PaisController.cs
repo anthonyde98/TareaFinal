@@ -12,7 +12,7 @@ namespace TareaFinal.Controllers
     public class PaisController : Controller
     {
         private readonly ILogger<PaisController> _logger;
-        Models.TareaFinalContext _db = new TareaFinalContext();
+        Models.TareaFinalContext db = new TareaFinalContext();
 
         public PaisController(ILogger<PaisController> logger)
         {
@@ -24,6 +24,14 @@ namespace TareaFinal.Controllers
             return View(BuscarPaises());
         }
 
+
+        public List<Pais> BuscarPaises()
+        {
+            var paises = this.db.Pais.ToList();
+
+            return paises;
+        }
+
         [HttpGet]
         public IActionResult Crear()
         {
@@ -33,8 +41,8 @@ namespace TareaFinal.Controllers
         [HttpPost]
         public IActionResult Crear(Pais pais)
         {
-            if (ExistePaisByName(pais.Nombre))
-                ViewBag.Datos = "Este pais ya existe";
+            if (ExistePaisPorNombre(pais.Nombre))
+                ViewBag.Datos = "Este paisBuscado ya existe";
             else
             {
                 InsertarPais(pais);
@@ -44,24 +52,45 @@ namespace TareaFinal.Controllers
             return View();
         }
 
-        public IActionResult Detalle(int id)
+        public bool ExistePaisPorNombre(string nombre)
         {
-            return View(BuscarPaisById(id));
+            bool paisExiste = this.db.Pais.Any(country => country.Nombre == nombre);
+
+            return paisExiste;
+        }
+
+        public void InsertarPais(Pais pais)
+        {
+            this.db.Pais.Add(pais);
+            this.db.SaveChanges();
+        }
+
+
+        public IActionResult Detalle(int idPais)
+        {
+            return View(BuscarPaisPorId(idPais));
+        }
+
+        public Pais BuscarPaisPorId(int idPais)
+        {
+            var paisBuscado = this.db.Pais.Single(pais => pais.IdPais == idPais);
+
+            return paisBuscado;
         }
 
         [HttpGet]
-        public IActionResult Editar(int id)
+        public IActionResult Editar(int idPais)
         {
-            return View(BuscarPaisById(id));
+            return View(BuscarPaisPorId(idPais));
         }
 
         [HttpPost]
         public IActionResult Editar(Pais pais)
         {
-            if (ExistePaisByName(pais.Nombre))
+            if (ExistePaisPorNombre(pais.Nombre))
             {
-                ViewBag.Datos = "Este pais ya existe";
-                return Editar(pais.Id);
+                ViewBag.Datos = "Este paisBuscado ya existe";
+                return Editar(pais.IdPais);
             }
             else
             {
@@ -71,58 +100,31 @@ namespace TareaFinal.Controllers
                 
         }
 
-        public IActionResult Eliminar(int id)
+        public void EditarPais(Pais pais)
         {
-            EliminarPais(id);
+            Pais paisPorEditar = BuscarPaisPorId(pais.IdPais);
+            paisPorEditar.Nombre = pais.Nombre;
+
+            this.db.SaveChanges();
+        }
+
+
+        public IActionResult Eliminar(int idPais)
+        {
+            EliminarPais(idPais);
             return View();
         }
 
-        //------------------------ Metodos CUD (Create, Update, Delete) ------------------------------
 
-        public void InsertarPais(Pais country)
+        
+        public void EliminarPais(int idPais)
         {
-            _db.Pais.Add(country);
-            _db.SaveChanges();
+            Pais paisPorEliminar = this.db.Pais.Single(pais => pais.IdPais == idPais);
+            this.db.Pais.Remove(paisPorEliminar);
+            this.db.SaveChanges();
         }
 
-        public void EditarPais(Pais country)
-        {
-            Pais country2 = _db.Pais.Single(pais => pais.Id == country.Id);
-            country2.Nombre = country.Nombre;
-
-            _db.SaveChanges();
-        }
-
-        public void EliminarPais(int id)
-        {
-            Pais country = _db.Pais.Single(pais => pais.Id == id);
-            _db.Pais.Remove(country);
-            _db.SaveChanges();
-        }
-
-        //-------------------------------------------------------------------------------------------
-
-        //------------------------------------ Metodos R (Read) -------------------------------------
-
-        public List<Pais> BuscarPaises()
-        {
-            var paises = _db.Pais.ToList();
-
-            return paises;
-        }
-
-        public Pais BuscarPaisById(int id)
-        {
-            var pais = _db.Pais.Single(country => country.Id == id);
-
-            return pais;
-        }
-
-        public bool ExistePaisByName(string nombre)
-        {
-            bool pais = _db.Pais.Any(country => country.Nombre == nombre);
-
-            return pais;
-        }
+      
+        
     }
 }

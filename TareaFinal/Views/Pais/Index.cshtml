@@ -16,12 +16,12 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <th scope="row">@item.Id</th>
+                            <th scope="row">@item.IdPais</th>
                             <td>@item.Nombre</td>
                             <td>
-                                @Html.ActionLink("", "Detalle", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-info fas fa-info-circle", style = "color: blue", title = "Detalle" })
-                                @Html.ActionLink("", "Editar", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-warning fas fa-pen-alt", style = "color: orange", title = "Editar" })
-                                @Html.ActionLink("", "Eliminar", new { id = item.Id }, new { @class = "text-decoration-none btn btn-link btn-outline-danger fas fa-trash-alt", style = "color: darkred", title = "Eliminar" })
+                                @Html.ActionLink("", "Detalle", new { idPais = item.IdPais }, new { @class = "text-decoration-none btn btn-link btn-outline-info fas fa-info-circle", style = "color: blue", title = "Detalle" })
+                                @Html.ActionLink("", "Editar", new { idPais = item.IdPais }, new { @class = "text-decoration-none btn btn-link btn-outline-warning fas fa-pen-alt", style = "color: orange", title = "Editar" })
+                                @Html.ActionLink("", "Eliminar", new { idPais = item.IdPais }, new { @class = "text-decoration-none btn btn-link btn-outline-danger fas fa-trash-alt", style = "color: darkred", title = "Eliminar" })
                             </td>
                         </tr>
                     }

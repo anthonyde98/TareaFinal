@@ -34,11 +34,11 @@ namespace TareaFinal.Controllers
         public IActionResult Crear(Pais pais)
         {
             if (ExistePaisByName(pais.Nombre))
-                ViewBag.Datos = "Este pais ya existe";
+                ViewBag.Datos = "Este país ya existe";
             else
             {
                 InsertarPais(pais);
-                ViewBag.Datos = "Pais agregado";
+                ViewBag.Datos = "País agregado";
             }
 
             return View();
@@ -60,8 +60,8 @@ namespace TareaFinal.Controllers
         {
             if (ExistePaisByName(pais.Nombre))
             {
-                ViewBag.Datos = "Este pais ya existe";
-                return Editar(pais.Id);
+                ViewBag.Datos = "Este país ya existe";
+                return Editar(pais.IdPais);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace TareaFinal.Controllers
 
         public void EditarPais(Pais country)
         {
-            Pais country2 = _db.Pais.Single(pais => pais.Id == country.Id);
+            Pais country2 = _db.Pais.Single(pais => pais.IdPais == country.IdPais);
             country2.Nombre = country.Nombre;
 
             _db.SaveChanges();
@@ -95,7 +95,7 @@ namespace TareaFinal.Controllers
 
         public void EliminarPais(int id)
         {
-            Pais country = _db.Pais.Single(pais => pais.Id == id);
+            Pais country = _db.Pais.Single(pais => pais.IdPais == id);
             _db.Pais.Remove(country);
             _db.SaveChanges();
         }
@@ -113,7 +113,7 @@ namespace TareaFinal.Controllers
 
         public Pais BuscarPaisById(int id)
         {
-            var pais = _db.Pais.Single(country => country.Id == id);
+            var pais = _db.Pais.Single(country => country.IdPais == id);
 
             return pais;
         }

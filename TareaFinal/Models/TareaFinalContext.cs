@@ -44,7 +44,7 @@ namespace TareaFinal.Models
 
                 entity.HasOne(d => d.NombrePaisNavigation)
                     .WithMany(p => p.Clientes)
-                    .HasForeignKey(d => d.NombrePais)
+                    .HasForeignKey(d => d.IdPais)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PAIS");
             });

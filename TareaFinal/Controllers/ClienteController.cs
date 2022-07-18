@@ -21,7 +21,7 @@ namespace TareaFinal.Controllers
 
         public IActionResult Index()
         {
-            return View(BuscarCliente());
+            return View(BuscarClientes());
         }
 
         [HttpGet]
@@ -74,16 +74,16 @@ namespace TareaFinal.Controllers
 
         public void EditarCliente(Cliente costumer)
         {
-            Cliente costumer2 = _db.Clientes.Single(cliente => cliente.Id == costumer.Id);
+            Cliente costumer2 = _db.Clientes.Single(cliente => cliente.IdCliente == costumer.IdCliente);
             costumer2.Nombre = costumer.Nombre;
-            costumer2.NombrePais = costumer.NombrePais;
+            costumer2.IdPais = costumer.IdPais;
             costumer2.FechaNacimiento = costumer.FechaNacimiento;
             _db.SaveChanges();
         }
 
         public void EliminarCliente(int id)
         {
-            Cliente costumer = _db.Clientes.Single(cliente => cliente.Id == id);
+            Cliente costumer = _db.Clientes.Single(cliente => cliente.IdCliente == id);
             _db.Clientes.Remove(costumer);
             _db.SaveChanges();
         }
@@ -92,17 +92,17 @@ namespace TareaFinal.Controllers
 
         //------------------------------------ Metodos R (Read) -------------------------------------
 
-        public IQueryable<ClienteViewModel> BuscarCliente()
+        public IQueryable<ClienteViewModel> BuscarClientes()
         {
             var Cliente = from c in _db.Clientes 
                           from p in _db.Pais 
-                          where c.NombrePais == p.Id 
+                          where c.IdPais == p.IdPais
                           select new ClienteViewModel() 
                           { 
-                              Id = c.Id, 
+                              IdCliente = c.IdCliente, 
                               Nombre = c.Nombre, 
                               FechaNacimiento = c.FechaNacimiento, 
-                              NombrePais = p.Nombre 
+                              IdPais = p.Nombre 
                           };
 
             return Cliente;
@@ -119,13 +119,13 @@ namespace TareaFinal.Controllers
         {
             var Cliente = from c in _db.Clientes
                           from p in _db.Pais
-                          where c.NombrePais == p.Id && c.Id == id
+                          where c.IdPais == p.IdPais && c.IdCliente == id
                           select new ClienteViewModel()
                           {
-                              Id = c.Id,
+                              IdCliente = c.IdCliente,
                               Nombre = c.Nombre,
                               FechaNacimiento = c.FechaNacimiento,
-                              NombrePais = p.Nombre
+                              IdPais = p.Nombre
                           };
 
             return Cliente.Single();
@@ -139,7 +139,7 @@ namespace TareaFinal.Controllers
         {
             EditarClienteViewModel CPs = new EditarClienteViewModel();
 
-            CPs.Cliente = _db.Clientes.Single(costumer => costumer.Id == id);
+            CPs.Cliente = _db.Clientes.Single(costumer => costumer.IdCliente == id);
 
             CPs.Paises = BuscarPaises();
 

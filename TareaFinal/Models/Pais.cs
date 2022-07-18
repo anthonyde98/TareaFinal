@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 #nullable disable
 
@@ -12,7 +13,8 @@ namespace TareaFinal.Models
             Clientes = new HashSet<Cliente>();
         }
 
-        public int Id { get; set; }
+        [Key]
+        public int IdPais { get; set; }
         public string Nombre { get; set; }
 
         public virtual ICollection<Cliente> Clientes { get; set; }
